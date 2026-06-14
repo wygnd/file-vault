@@ -13,8 +13,6 @@ type MinioConfig struct {
 	AccessKey  string
 	SecretKey  string
 	BucketName string
-	User       string
-	Password   string
 	UseSSL     bool
 }
 
@@ -45,16 +43,14 @@ func LoadConfig() {
 			AccessKey:  getEnv("MINIO_ACCESS_KEY", ""),
 			SecretKey:  getEnv("MINIO_SECRET_KEY", ""),
 			BucketName: getEnv("MINIO_BUCKET_NAME", "defaultBucket"),
-			User:       getEnv("MINIO_USER", ""),
-			Password:   getEnv("MINIO_PASSWORD", ""),
 			UseSSL:     getEnvAsBool("MINIO_USE_SSL", false),
 		},
 		Database: DatabaseConfig{
-			Host:     getEnv("DATABASE_HOST", "localhost"),
-			Port:     getEnv("DATABASE_PORT", "5432"),
-			User:     getEnv("DATABASE_USER", "postgres"),
-			Password: getEnv("DATABASE_PASSWORD", "postgres"),
-			Name:     getEnv("DATABASE_NAME", "file_service"),
+			Host:     getEnv("FILE_SERVICE_DATABASE_HOST", "localhost"),
+			Port:     getEnv("FILE_SERVICE_DATABASE_PORT", "5432"),
+			User:     getEnv("FILE_SERVICE_DATABASE_USER", "postgres"),
+			Password: getEnv("FILE_SERVICE_DATABASE_PASSWORD", "postgres"),
+			Name:     getEnv("FILE_SERVICE_DATABASE_NAME", "file_service"),
 		},
 	}
 }

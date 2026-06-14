@@ -31,7 +31,7 @@ func (m *minioClient) Init() error {
 	ctx := context.Background()
 
 	client, err := minio.New(config.AppConfig.Minio.Endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(config.AppConfig.Minio.SecretKey, config.AppConfig.Minio.AccessKey, ""),
+		Creds:  credentials.NewStaticV4(config.AppConfig.Minio.AccessKey, config.AppConfig.Minio.SecretKey, ""),
 		Secure: config.AppConfig.Minio.UseSSL,
 	})
 

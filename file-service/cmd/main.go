@@ -12,6 +12,8 @@ import (
 	grpcFileService "github.com/wygnd/file-vault/file-service/pkg/grpc"
 	"github.com/wygnd/file-vault/file-service/pkg/minio"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 func main() {
@@ -43,6 +45,11 @@ func main() {
 	fileGrpcService := grpcFileService.NewFileGrpcService(fileService)
 	gen.RegisterFileServiceServer(grpcServer, fileGrpcService)
 
+	// healthcheck server
+	healthServer := health.NewServer()
+	grpc_health_v1.RegisterHealthServer(grpcServer, healthServer)
+	healthServer.SetServingStatus("", grpc_health_v1.HealthCheckResponse_SERVING)
+
 	listener, err := net.Listen("tcp", ":"+config.AppConfig.Port)
 
 	if err != nil {
@@ -54,5 +61,4 @@ func main() {
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("Ошибка запуска gRPC сервера: %v", err)
 	}
-
 }

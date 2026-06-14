@@ -83,27 +83,23 @@ filevault/
 ## TODO
 
 ### 🔧 Инфраструктура
-- [ ] Создать `docker-compose.yml`
-  - [ ]  PostgreSQL
-  - [ ]  MinIO
-- [ ] Настроить `.env` файлы для каждого сервиса
-- [ ] Написать `Makefile` с командами `up`, `down`, `logs`
+- [x] Создать `docker-compose.yml`
+  - [x]  PostgreSQL
+  - [x]  MinIO
+- [x] Настроить `.env` файлы для каждого сервиса
+- [x] Написать `Makefile`
 
 ---
 
 ### 🐹 Go File Service (`/file-service`)
-- [ ] Инициализировать проект (`go mod init`)
-- [ ] Выбрать HTTP фреймворк (Gin или Echo)
-- [ ] Подключить MinIO SDK (`minio-go`)
-- [ ] `POST /upload` — стриминговая загрузка файла в MinIO
-- [ ] `GET /download/:id` — скачивание файла из MinIO
-- [ ] `DELETE /file/:id` — удаление файла
-- [ ] Подключить PostgreSQL (`pgx` или `sqlx`)
-- [ ] Сохранять метаданные файла в БД (UUID-ключ, mime, size, hash)
-- [ ] SHA-256 хэш при загрузке (дедупликация)
+- [x] Инициализировать проект (`go mod init`)
+- [x] Подключить MinIO SDK (`minio-go`)
+- [x] Подключить PostgreSQL (`pgx` или `sqlx`)
+- [x] Сохранять метаданные файла в БД (UUID-ключ, mime, size, hash)
+- [x] SHA-256 хэш при загрузке (дедупликация)
 - [ ] Генерация thumbnails для изображений (`imaging` или `vips`)
 - [ ] Unit-тесты для хендлеров
-- [ ] Dockerfile для сервиса
+- [x] Dockerfile для сервиса
 
 ---
 
