@@ -1,9 +1,23 @@
 services:
+  api-gateway:
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    container_name: file-vault_api-gateway
+    ports:
+      - "${API_GATEWAY_PORT}:3000"
+    env_file:
+      - .env
+    depends_on:
+      file-service:
+        condition: service_healthy
+
+
   file-service:
     build:
       context: ./file-service
       dockerfile: ./Dockerfile
-    container_name: file_service
+    container_name: file-vault_file-service
     ports:
       - "${FILE_SERVICE_PORT}:50051"
     env_file:
