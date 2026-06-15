@@ -1,0 +1,7 @@
+README.md
+eslint.config.mjs
+.prettierrc
+node_modules
+.idea
+.vscode
+.gitignore
