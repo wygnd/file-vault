@@ -10,7 +10,8 @@
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   Клиенты                           │
-│         Angular SPA        Telegram Bot             │
+│         Angular SPA        Telegram Bot             │ 
+│                             (in future)             │
 └────────────────┬───────────────────┬────────────────┘
                  │                   │
                  ▼                   ▼
@@ -104,16 +105,14 @@ filevault/
 ---
 
 ### 🏗️ NestJS API Gateway (`/gateway`)
-- [ ] Инициализировать проект (`nest new`)
-- [ ] Модуль аутентификации (JWT + refresh токены)
-- [ ] Passport стратегии (local + jwt)
+- [x] Инициализировать проект (`nest new`)
 - [ ] Guards для защиты роутов
 - [ ] Модуль пользователей + роли
 - [ ] Проксирование запросов в Go file service
 - [ ] Модуль папок (CRUD)
 - [ ] Валидация через `class-validator`
-- [ ] Swagger документация (`@nestjs/swagger`)
-- [ ] Dockerfile для сервиса
+- [x] Swagger документация (`@nestjs/swagger`)
+- [x] Dockerfile для сервиса
 
 ---
 
@@ -131,24 +130,12 @@ filevault/
 
 ---
 
-### 🤖 Telegram Bot (опционально, второй этап)
+### 🤖 Telegram Bot (опционально)
 - [ ] Создать бота через @BotFather
 - [ ] Go или Node.js обёртка
 - [ ] Команда `/upload` — отправить файл боту → сохраняется на сервер
 - [ ] Команда `/list` — список последних загрузок
 - [ ] Учесть лимит Telegram: файлы до 2 ГБ для ботов
-
----
-
-## Порядок разработки
-
-```
-1. docker-compose.yml (поднять MinIO + PostgreSQL)
-2. Go File Service (upload/download — минимум)
-3. NestJS Gateway (auth + проксирование)
-4. Angular (авторизация + файловый менеджер)
-5. Полировка + Telegram Bot
-```
 
 ---
 
