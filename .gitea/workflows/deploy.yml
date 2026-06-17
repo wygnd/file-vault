@@ -9,8 +9,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: https://gitea.com/actions/checkout@v4
+      - name: Clone repo
+        run: |
+          git clone http://wygndo:${{ secrets.GITEA_TOKEN }}@gitea:3000/wygndo/file-vault.git .
 
       - name: Create .env
         run: |
