@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Clone repo
         run: |
-          git clone http://wygndo:${{ secrets.GITEA_TOKEN }}@gitea:3000/wygndo/file-vault.git .
+          git clone http://wygndo:${{ secrets.GITEA_TOKEN }}@localhost:3000/wygndo/file-vault.git .
 
       - name: Create .env
         run: |
