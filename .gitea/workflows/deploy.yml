@@ -1,0 +1,16 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull and Build containers
+        run: |
+          cd ~/Documents/projects/file-vault
+          git pull
+          docker compose up -d --build
