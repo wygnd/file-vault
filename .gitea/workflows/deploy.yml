@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Pull and Build containers
         run: |
-          cd home/user/Documents/projects/file-vault
+          cd /home/user/Documents/projects/file-vault
           git pull
           docker compose up -d --build
