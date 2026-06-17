@@ -9,8 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Pull and Build containers
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create .env
         run: |
-          cd /home/user/Documents/projects/file-vault
-          git pull
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Deploy
+        run: |
           docker compose up -d --build
