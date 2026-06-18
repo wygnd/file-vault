@@ -13,7 +13,7 @@ COPY . .
 RUN pnpm run build
 
 
-FROM node24-alpine as deploy
+FROM node:24-alpine as deploy
 
 WORKDIR /app
 
