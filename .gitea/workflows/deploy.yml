@@ -9,14 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repo
-        run: |
-          git clone http://wygndo:${{ secrets.GITEA_TOKEN }}@localhost:3000/wygndo/file-vault.git .
-
-      - name: Create .env
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-
-      - name: Deploy
-        run: |
-          docker compose up -d --build
+      - name: Connecting and Deploy via SSH
+        users: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/Documents/file-vault
+            git pull
+            sudo docker compose up -d --build
