@@ -18,5 +18,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/Documents/projects/file-vault
-            git pull
+            git pull           
+            make
             docker compose up -d --build
