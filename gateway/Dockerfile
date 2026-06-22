@@ -23,8 +23,6 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN pnpm install --frozen-lockfile --prod
 
-RUN pnpm run build
-
 COPY --from=build /app/dist ./dist
 COPY ./gen ./dist/gen
 
