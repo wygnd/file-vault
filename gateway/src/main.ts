@@ -4,14 +4,14 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { setupAppVersioning } from './common/versioning';
+import { setupAppVersioning } from '@common/versioning';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
-import { setupAppCors } from './common/cors';
-import { setupAppPrefix } from './common/preffix';
-import { setupAppFilters } from './common/filters';
-import { setupAppPipes } from './common/pipes';
-import { setupAppDocs } from './common/documentation';
+import { setupAppCors } from '@common/cors';
+import { setupAppPrefix } from '@common/preffix';
+import { setupAppFilters } from '@common/filters';
+import { setupAppPipes } from '@common/pipes';
+import { setupAppDocs } from '@common/documentation';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

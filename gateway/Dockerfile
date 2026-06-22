@@ -13,7 +13,7 @@ COPY . .
 RUN pnpm run build
 
 
-FROM node:24-alpine as deploy
+FROM node:24-alpine as production
 
 WORKDIR /app
 
@@ -23,8 +23,10 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN pnpm install --frozen-lockfile --prod
 
+RUN pnpm run build && ls -la /app/dist/
+
 COPY --from=build /app/dist ./dist
 
 EXPOSE 3000
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
