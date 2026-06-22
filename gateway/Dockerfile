@@ -1,4 +1,4 @@
-FROM node:24-alpine as build
+FROM node:24-alpine AS build
 LABEL authors="wygnd"
 
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY . .
 RUN pnpm run build
 
 
-FROM node:24-alpine as production
+FROM node:24-alpine AS production
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN pnpm install --frozen-lockfile --prod
 
-RUN pnpm run build && ls -la /app/dist/
+RUN pnpm run build
 
 COPY --from=build /app/dist ./dist
 
