@@ -26,6 +26,6 @@ RUN pnpm install --frozen-lockfile --prod
 COPY --from=build /app/dist ./dist
 COPY ./gen ./dist/gen
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD ["node", "dist/src/main.js"]
