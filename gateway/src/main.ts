@@ -12,11 +12,18 @@ import { setupAppPrefix } from '@common/preffix';
 import { setupAppFilters } from '@common/filters';
 import { setupAppPipes } from '@common/pipes';
 import { setupAppDocs } from '@common/documentation';
+import { setupAppPlugins } from '@common/plugins';
+import { setupAppInterceptors } from '@common/interceptors';
 
 async function bootstrap() {
+  const fastifyAdapter = new FastifyAdapter();
+
+  // Добавляем плагины
+  await setupAppPlugins(fastifyAdapter);
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    fastifyAdapter,
   );
   const config = app.get(ConfigService);
   const logger = new Logger('Application');
@@ -38,6 +45,9 @@ async function bootstrap() {
 
   // Добавляем документацию
   setupAppDocs(app);
+
+  // Добавляем перехватчики
+  setupAppInterceptors(app);
 
   const PORT = config.get<number>('API_GATEWAY_PORT') ?? 3000;
 

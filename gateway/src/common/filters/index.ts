@@ -1,6 +1,6 @@
-import {NestFastifyApplication} from "@nestjs/platform-fastify";
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { TransformErrorFilter } from '@shared/filters/error/filter';
 
 export const setupAppFilters = (app: NestFastifyApplication): void => {
-	// todo
-	// app.useGlobalFilters()
-}
+  app.useGlobalFilters(new TransformErrorFilter());
+};
