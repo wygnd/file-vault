@@ -19,9 +19,8 @@ import { FileGrpcProvider } from '@modules/files/providers';
             package: FILE_PACKAGE_NAME,
             protoPath: join(
               process.cwd(),
-              '..',
-              'shared',
-              'proto',
+              'dist',
+              'gen',
               'file',
               'file.proto',
             ),
