@@ -35,12 +35,57 @@ export class FileGrpcProvider implements OnModuleInit {
     }
   }
 
-  // todo
-  public async getFiles(folderId: string = '') {
+  /**
+   * Получить список файлов
+   * @param folderId
+   * @param cursor
+   * @param limit
+   */
+  public async getFiles(
+    folderId: string = '',
+    cursor?: string,
+    limit: number = 25,
+  ) {
     try {
       return await firstValueFrom(
         this.fileClient.listByFolderId({
           folderId: folderId,
+          cursor: cursor,
+          limit: limit,
+        }),
+      );
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  /**
+   * Получить файл по ID
+   * @param fileId
+   */
+  public async getById(fileId: string) {
+    try {
+      return await firstValueFrom(
+        this.fileClient.getById({
+          id: fileId,
+        }),
+      );
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  /**
+   * Удалить файл по ID
+   * @param fileId
+   */
+  public async delete(fileId: string) {
+    try {
+      return await firstValueFrom(
+        this.fileClient.delete({
+          id: fileId,
         }),
       );
     } catch (error) {
