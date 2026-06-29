@@ -24,7 +24,6 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=build /app/dist ./dist
-COPY ./gen ./dist/gen
 
 EXPOSE 5000
 

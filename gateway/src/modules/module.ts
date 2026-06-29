@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { FilesModule } from '@modules/files/module';
 
 @Module({
   imports: [
@@ -8,7 +7,6 @@ import { FilesModule } from '@modules/files/module';
       isGlobal: true,
       cache: true,
     }),
-    FilesModule,
   ],
   controllers: [],
   providers: [],
