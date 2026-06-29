@@ -25,8 +25,6 @@ RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=build /app/dist ./dist
 
-COPY . ../shared/proto
-
 EXPOSE 5000
 
 CMD ["node", "dist/src/main.js"]

@@ -8,6 +8,8 @@ services:
       - "${API_GATEWAY_PORT}:5000"
     env_file:
       - .env
+    volumes:
+      - ./shared:/app
     depends_on:
       file-service:
         condition: service_healthy
