@@ -25,7 +25,7 @@ RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=build /app/dist ./dist
 
-COPY /app/proto ../shared/proto
+COPY . ../shared/proto
 
 EXPOSE 5000
 
