@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./shared:/app
+      - ./shared:/app/shared
     depends_on:
       file-service:
         condition: service_healthy
