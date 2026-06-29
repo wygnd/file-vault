@@ -1,4 +1,4 @@
-package fileservice
+package service
 
 import (
 	"github.com/wygnd/file-vault/file-service/internal/common/dto"
@@ -117,7 +117,7 @@ func (service *fileService) Delete(id string) error {
 
 // ListByFolderID получает список файлов в конкретной папке
 func (service *fileService) ListByFolderID(folderId string) ([]*dto.FileResponseDTO, error) {
-	records, err := service.repo.ListByFolderID(&folderId)
+	records, err := service.repo.ListByFolderID(folderId)
 
 	if err != nil {
 		return nil, err

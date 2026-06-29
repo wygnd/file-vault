@@ -1,4 +1,4 @@
-package file_repository
+package repository
 
 import (
 	"github.com/wygnd/file-vault/file-service/internal/common/models"
@@ -9,7 +9,7 @@ type FileRepository interface {
 	Create(file *models.File) error
 	GetById(ID string) (*models.File, error)
 	Delete(ID string) error
-	ListByFolderID(folderID *string) ([]models.File, error)
+	ListByFolderID(folderID string) ([]models.File, error)
 }
 
 type fileRepository struct {
@@ -58,7 +58,7 @@ func (repo *fileRepository) Delete(ID string) error {
 }
 
 // ListByFolderID получает список файлов по ID папки
-func (repo *fileRepository) ListByFolderID(folderID *string) ([]models.File, error) {
+func (repo *fileRepository) ListByFolderID(folderID string) ([]models.File, error) {
 	var files []models.File
 
 	result := repo.db.Where("folder_id = ?", folderID).Find(&files)

@@ -7,8 +7,8 @@ import (
 	gen "github.com/wygnd/file-vault/file-service/gen/file"
 	"github.com/wygnd/file-vault/file-service/internal/common/config"
 	"github.com/wygnd/file-vault/file-service/internal/common/db"
-	filerepository "github.com/wygnd/file-vault/file-service/internal/common/repository"
-	fileservice "github.com/wygnd/file-vault/file-service/internal/common/service"
+	"github.com/wygnd/file-vault/file-service/internal/common/repository"
+	"github.com/wygnd/file-vault/file-service/internal/common/service"
 	grpcFileService "github.com/wygnd/file-vault/file-service/pkg/grpc"
 	"github.com/wygnd/file-vault/file-service/pkg/minio"
 	"google.golang.org/grpc"
@@ -34,15 +34,17 @@ func main() {
 		log.Fatalf("Ошибка подключения к БД: %v", err)
 	}
 
-	// Подключаем репозиторий
-	fileRepository := filerepository.NewFileRepository(database)
+	// Подключаем Репозитории
+	fileRepository := repository.NewFileRepository(database)
+	folderRepository := repository.NewFolderRepository(database)
 
-	// Подключаем Сервис
-	fileService := fileservice.NewFileService(fileRepository, minioClient)
+	// Подключаем Сервисы
+	fileService := service.NewFileService(fileRepository, minioClient)
+	folderService := service.NewFolderService(folderRepository, fileRepository)
 
 	// gRPC server
 	grpcServer := grpc.NewServer()
-	fileGrpcService := grpcFileService.NewFileGrpcService(fileService)
+	fileGrpcService := grpcFileService.NewFileGrpcService(fileService, folderService)
 	gen.RegisterFileServiceServer(grpcServer, fileGrpcService)
 
 	// healthcheck server

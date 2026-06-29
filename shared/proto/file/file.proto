@@ -7,6 +7,7 @@ option go_package = "github.com/wygnd/file-vault/file-service/gen/file";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
+// Files
 message UploadRequest {
   string file_name = 1;
   string mime_type = 2;
@@ -36,15 +37,59 @@ message DeleteRequest {
 
 message ListByFolderIdRequest {
   string folder_id = 1;
+  int32 limit = 2;
+  optional string cursor = 3;
 }
 message ListByFolderIdResponse {
   repeated FileResponse result = 1;
+  optional string next_cursor = 2;
+}
+
+
+// Folders
+message FolderResponse {
+  string id = 1;
+  string name = 2;
+  optional string parent_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message CreateFolderRequest {
+  string name = 1;
+  optional string parent_id = 2;
+  string owner_id = 3;
+}
+
+message UpdateFolderRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message DeleteFolderRequest {
+  string id = 1;
+}
+
+message GetFolderChildrenRequest {
+  optional string parent_id = 1;
+  string owner_id = 2;
+}
+
+message GetFolderChildrenResponse {
+  repeated FolderResponse folders = 1;
+  repeated FileResponse files = 2;
 }
 
 // Define methods
 service FileService {
+  // Files
   rpc Upload(UploadRequest) returns (FileResponse);
   rpc GetById(GetByIdRequest) returns (GetByIdResponse);
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
   rpc ListByFolderId(ListByFolderIdRequest) returns (ListByFolderIdResponse);
+
+  // Folders
+  rpc CreateFolder(CreateFolderRequest) returns (FolderResponse);
+  rpc UpdateFolder(UpdateFolderRequest) returns (FolderResponse);
+  rpc DeleteFolder(DeleteFolderRequest) returns (google.protobuf.Empty);
+  rpc GetFolderChildren(GetFolderChildrenRequest) returns (GetFolderChildrenResponse);
 }
