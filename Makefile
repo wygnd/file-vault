@@ -37,4 +37,4 @@ clean-generate:
 
 # ALL
 .PHONY: gen-all
-gen-all: generate-go-file_service generate-nestjs
+generate-all: generate-go-file_service generate-nestjs

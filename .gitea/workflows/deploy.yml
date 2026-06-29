@@ -19,5 +19,5 @@ jobs:
           script: |
             cd ~/Documents/projects/file-vault
             git pull           
-            make
+            make generate-all
             docker compose up -d --build
