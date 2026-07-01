@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package enums.v1;
+
+enum ErrorCode {
+  INTERNAL_ERROR = 0;
+  VALIDATION_ERROR = 1;
+  UNAUTHORIZED = 2;
+  FORBIDDEN = 3;
+  NOT_FOUND = 4;
+  ALREADY_EXISTS = 5;
+
+  // File-service specific
+  FILE_NOT_FOUND = 6;
+  FILE_TOO_LARGE = 7;
+  STORAGE_QUOTA_EXCEEDED = 8;
+}

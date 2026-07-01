@@ -12,7 +12,13 @@ generate-go-file_service:
 # API GATEWAY (NestJS)
 PROTO_SRC          := shared/proto
 GATEWAY_GEN        := gateway/gen
-PLUGIN             := gateway/node_modules/.bin/protoc-gen-ts_proto
+
+ifeq ($(OS),Windows_NT)
+	PLUGIN := gateway/node_modules/.bin/protoc-gen-ts_proto.CMD
+else
+	PLUGIN := gateway/node_modules/.bin/protoc-gen-ts_proto
+endif
+
 PROTO_LIST         := $(shell find $(PROTO_SRC) -name "*.proto")
 
 export PATH         := $(dir $(shell which node)):$(PATH)
