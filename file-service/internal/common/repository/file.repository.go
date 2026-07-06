@@ -35,7 +35,7 @@ func (repo *fileRepository) Create(file *models.File) error {
 func (repo *fileRepository) GetById(ID string) (*models.File, error) {
 	var file models.File
 
-	result := repo.db.First(&file, ID)
+	result := repo.db.Where("id = ?", ID).Where("deleted_at IS NOT NULL").First(&file)
 
 	if result.Error != nil {
 		return nil, result.Error
