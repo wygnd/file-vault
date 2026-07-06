@@ -30,8 +30,16 @@ func main() {
 
 	// Подключаемся к БД
 	database, err := db.Init()
+
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД: %v", err)
+	}
+
+	// Запускаем миграции
+	err = db.RunMigrations(database)
+
+	if err != nil {
+		log.Fatalf("Ошибка синхронизации БД: %v", err)
 	}
 
 	// Подключаем Репозитории
