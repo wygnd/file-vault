@@ -16,6 +16,11 @@ import (
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
+const (
+	// 50МБ размер передаваемого файла
+	maxMessageSize = 50 * 1024 * 1025
+)
+
 func main() {
 	// Загрузка .env файла
 	config.LoadConfig()
@@ -51,7 +56,11 @@ func main() {
 	folderService := service.NewFolderService(folderRepository, fileRepository)
 
 	// gRPC server
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.MaxRecvMsgSize(maxMessageSize),
+		grpc.MaxSendMsgSize(maxMessageSize),
+	)
+
 	fileGrpcService := grpcFileService.NewFileGrpcService(fileService, folderService)
 	gen.RegisterFileServiceServer(grpcServer, fileGrpcService)
 
