@@ -48,7 +48,7 @@ func (repo *fileRepository) GetById(ID string) (*models.File, error) {
 func (repo *fileRepository) Delete(ID string) error {
 	var file models.File
 
-	result := repo.db.Delete(&file, ID)
+	result := repo.db.Where("id = ?", ID).Delete(&file)
 
 	if result.Error != nil {
 		return result.Error
