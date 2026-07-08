@@ -88,11 +88,11 @@ func (service *fileService) GetByID(id string) (*dto.FileDetailResponseDTO, erro
 	}, nil
 }
 
-// Delete удаляет объект из БД и S3
+// Delete удаляет объект из БД
 func (service *fileService) Delete(id string) error {
 
 	// Получаем запись из БД
-	record, err := service.repo.GetById(id)
+	_, err := service.repo.GetById(id)
 
 	// Если не удалось получить: выдаем ошибку
 	if err != nil {
@@ -101,14 +101,6 @@ func (service *fileService) Delete(id string) error {
 
 	// Удаляем запись из БД
 	err = service.repo.Delete(id)
-
-	// Не получилось: выдаем ошибку
-	if err != nil {
-		return err
-	}
-
-	// Удаляем из хранилища
-	err = service.minio.DeleteOne(record.StorageKey)
 
 	// Не получилось: выдаем ошибку
 	if err != nil {
