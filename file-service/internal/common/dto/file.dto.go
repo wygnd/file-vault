@@ -18,3 +18,8 @@ type FileResponseDTO struct {
 	Size      int64
 	CreatedAt time.Time
 }
+
+type FileDetailResponseDTO struct {
+	FileResponseDTO
+	URL string
+}

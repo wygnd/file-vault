@@ -44,9 +44,7 @@ func (server *FileGrpcService) GetById(ctx context.Context, request *gen.GetById
 		return nil, err
 	}
 
-	return &gen.GetByIdResponse{
-		Url: result,
-	}, nil
+	return mappers.ToGrpcFileDetailResponse(result), nil
 }
 
 func (server *FileGrpcService) Delete(ctx context.Context, request *gen.DeleteRequest) (*emptypb.Empty, error) {

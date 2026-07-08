@@ -12,7 +12,7 @@ import (
 
 type FileService interface {
 	Upload(file dto.UploadFile) (*dto.FileResponseDTO, error)
-	GetByID(id string) (string, error)
+	GetByID(id string) (*dto.FileDetailResponseDTO, error)
 	Delete(id string) error
 	ListByFolderID(folderId string) ([]*dto.FileResponseDTO, error)
 }
@@ -68,21 +68,24 @@ func (service *fileService) Upload(file dto.UploadFile) (*dto.FileResponseDTO, e
 }
 
 // GetByID получает ссылку на файл по ID
-func (service *fileService) GetByID(id string) (string, error) {
+func (service *fileService) GetByID(id string) (*dto.FileDetailResponseDTO, error) {
 
 	record, errGetRecord := service.repo.GetById(id)
 
 	if errGetRecord != nil {
-		return "", errGetRecord
+		return nil, errGetRecord
 	}
 
 	url, errGetUrl := service.minio.GetOne(record.StorageKey)
 
 	if errGetUrl != nil {
-		return "", errGetUrl
+		return nil, errGetUrl
 	}
 
-	return url, nil
+	return &dto.FileDetailResponseDTO{
+		FileResponseDTO: *mappers.ToFileResponseDTO(record),
+		URL:             url,
+	}, nil
 }
 
 // Delete удаляет объект из БД и S3

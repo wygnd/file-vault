@@ -26,3 +26,14 @@ func ToGrpcFileResponse(dto *dto.FileResponseDTO) *gen.FileResponse {
 		CreatedAt: timestamppb.New(dto.CreatedAt),
 	}
 }
+
+func ToGrpcFileDetailResponse(dto *dto.FileDetailResponseDTO) *gen.GetByIdResponse {
+	return &gen.GetByIdResponse{
+		Id:        dto.ID,
+		Name:      dto.Name,
+		MimeType:  dto.MimeType,
+		Size:      dto.Size,
+		Url:       dto.URL,
+		CreatedAt: timestamppb.New(dto.CreatedAt),
+	}
+}

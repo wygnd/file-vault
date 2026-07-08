@@ -28,7 +28,12 @@ message GetByIdRequest {
   string id = 1;
 }
 message GetByIdResponse {
-  string url = 1;
+  string id = 1;
+  string name = 2;
+  string mime_type = 4;
+  int64 size = 5;
+  string url = 6;
+  google.protobuf.Timestamp created_at = 7;
 }
 
 message DeleteRequest {
