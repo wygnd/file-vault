@@ -8,5 +8,4 @@ export class UploadFileGrpcResponseDTO implements FileResponse {
   size: number;
   createdAt: Timestamp | undefined;
   folderId?: string;
-
 }

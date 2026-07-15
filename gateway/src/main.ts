@@ -13,10 +13,13 @@ import { setupAppFilters } from '@common/filters';
 import { setupAppPipes } from '@common/pipes';
 import { setupAppDocs } from '@common/documentation';
 import { setupAppPlugins } from '@common/plugins';
-import { setupAppInterceptors } from '@common/interceptors';
+import { randomUUID } from 'node:crypto';
 
 async function bootstrap() {
-  const fastifyAdapter = new FastifyAdapter();
+  const fastifyAdapter = new FastifyAdapter({
+    requestIdHeader: 'x-request-id',
+    genReqId: (req) => req.headers['x-request-id'] || randomUUID(),
+  });
 
   // Добавляем плагины
   await setupAppPlugins(fastifyAdapter);
@@ -45,9 +48,6 @@ async function bootstrap() {
 
   // Добавляем документацию
   setupAppDocs(app);
-
-  // Добавляем перехватчики
-  setupAppInterceptors(app);
 
   const PORT = config.get<number>('API_GATEWAY_PORT') ?? 3000;
 

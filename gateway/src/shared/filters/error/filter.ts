@@ -4,18 +4,23 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { ErrorCode } from '@generated/enums/v1/enums';
 import { status as GrpcStatus } from '@grpc/grpc-js';
+import { ErrorCode } from '@generated/enums/v1/enums';
 
 @Catch()
 export class TransformErrorFilter implements ExceptionFilter {
+  private readonly logger = new Logger(TransformErrorFilter.name);
+
   catch(exception: unknown, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse() as FastifyReply;
 
     const { status, errCode, errDetail } = this.resolveException(exception);
+
+    this.logger.error(exception);
 
     response.status(status).send({
       ok: false,
@@ -30,11 +35,15 @@ export class TransformErrorFilter implements ExceptionFilter {
     errCode: string;
     errDetail: string;
   } {
+    console.log('CHECK ERROR', this.isGrpcError(exception), exception);
     if (this.isGrpcError(exception)) {
       return {
         status: this.mapGrpcStatusToHttpStatus(exception.code),
         errCode: this.mapGrpcStatusToCode(exception.code),
-        errDetail: exception.details,
+        errDetail: this.mapGrpcDetailToDetail(
+          exception.code,
+          exception.details,
+        ),
       };
     }
 
@@ -85,18 +94,43 @@ export class TransformErrorFilter implements ExceptionFilter {
     }
   }
 
+  /**
+   * Маппинг GPRC статусов с HTTP
+   * @param status
+   * @private
+   */
   private mapGrpcStatusToHttpStatus(status: GrpcStatus): HttpStatus {
     switch (status) {
       case GrpcStatus.NOT_FOUND:
         return HttpStatus.NOT_FOUND;
+
       case GrpcStatus.INVALID_ARGUMENT:
+      case GrpcStatus.FAILED_PRECONDITION:
+      case GrpcStatus.OUT_OF_RANGE:
         return HttpStatus.BAD_REQUEST;
+
       case GrpcStatus.PERMISSION_DENIED:
         return HttpStatus.FORBIDDEN;
+
       case GrpcStatus.UNAUTHENTICATED:
         return HttpStatus.UNAUTHORIZED;
+
       case GrpcStatus.ALREADY_EXISTS:
+      case GrpcStatus.ABORTED:
         return HttpStatus.CONFLICT;
+
+      case GrpcStatus.UNAVAILABLE:
+        return HttpStatus.SERVICE_UNAVAILABLE;
+
+      case GrpcStatus.DEADLINE_EXCEEDED:
+        return HttpStatus.GATEWAY_TIMEOUT;
+
+      case GrpcStatus.RESOURCE_EXHAUSTED:
+        return HttpStatus.TOO_MANY_REQUESTS;
+
+      case GrpcStatus.UNIMPLEMENTED:
+        return HttpStatus.NOT_IMPLEMENTED;
+
       default:
         return HttpStatus.INTERNAL_SERVER_ERROR;
     }
@@ -106,16 +140,30 @@ export class TransformErrorFilter implements ExceptionFilter {
     switch (status) {
       case GrpcStatus.NOT_FOUND:
         return ErrorCode.NOT_FOUND;
+
       case GrpcStatus.INVALID_ARGUMENT:
         return ErrorCode.VALIDATION_ERROR;
+
       case GrpcStatus.PERMISSION_DENIED:
         return ErrorCode.FORBIDDEN;
+
       case GrpcStatus.UNAUTHENTICATED:
         return ErrorCode.UNAUTHORIZED;
+
       case GrpcStatus.ALREADY_EXISTS:
         return ErrorCode.ALREADY_EXISTS;
+
       default:
         return ErrorCode.INTERNAL_ERROR;
+    }
+  }
+
+  private mapGrpcDetailToDetail(status: GrpcStatus, detail: string): string {
+    switch (status) {
+      case GrpcStatus.UNAVAILABLE:
+        return 'Internal Server Error';
+      default:
+        return detail;
     }
   }
 }

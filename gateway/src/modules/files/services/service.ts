@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { MultipartFile } from '@fastify/multipart';
 import { FileGrpcProvider } from '@modules/files/providers';
-import { FileListQueryRequestDTO } from '@modules/files/dto';
+import {
+  FileListQueryRequestDTO,
+  FileListResponseDTO,
+} from '@modules/files/dto';
 
 @Injectable()
 export class FileService {
@@ -31,7 +34,7 @@ export class FileService {
         fileName: file.filename,
         size: fileBuffer.length,
         mimeType: file.mimetype,
-        ownerId: '123', // fixme
+        ownerId: '1', // fixme
         data: fileBuffer,
       });
     } catch (error) {
@@ -39,10 +42,8 @@ export class FileService {
         throw error;
       }
 
-      this.logger.error(error);
-      throw new InternalServerErrorException(
-        'Произошла непредвиденная ошибка на сервере',
-      );
+      // this.logger.error(error);
+      throw error;
     }
   }
 
@@ -52,18 +53,15 @@ export class FileService {
    * Возвращает список файлов в директории
    * @param query
    */
-  public async getFileList(query: FileListQueryRequestDTO) {
+  public async getFileList(
+    query: FileListQueryRequestDTO,
+  ): Promise<FileListResponseDTO> {
     try {
-      const result = await this.fileGrpcProvider.getFiles(
+      return await this.fileGrpcProvider.getFiles(
         query.folder_id,
         query.cursor,
         query.limit,
       );
-
-      return {
-        items: result.result,
-        next_cursor: result.nextCursor,
-      };
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -93,6 +91,25 @@ export class FileService {
       this.logger.error(error);
       throw new InternalServerErrorException(
         'Произошла непредвиденная ошибка на сервере',
+      );
+    }
+  }
+
+  /**
+   * Получить файл по ID
+   * @param fileId
+   */
+  public async getFileById(fileId: string) {
+    try {
+      return this.fileGrpcProvider.getById(fileId);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      this.logger.error(error);
+      throw new InternalServerErrorException(
+        'Произошла непредвиденная ошбика на сервере',
       );
     }
   }

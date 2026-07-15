@@ -17,7 +17,11 @@ import {
 } from '@nestjs/swagger';
 import { type FastifyRequest } from 'fastify';
 import { FileService } from '@modules/files/services/service';
-import { FileListQueryRequestDTO } from '@modules/files/dto';
+import {
+  FileDeleteParamRequestDTO,
+  FileGetParamsDTO,
+  FileListQueryRequestDTO,
+} from '@modules/files/dto';
 
 @ApiTags('Работа с файлами')
 @Controller({
@@ -63,11 +67,13 @@ export class FileControllerV1 {
     example: true,
   })
   @Delete(':file_id')
-  async deleteFile(@Param('file_id') fileId: string) {
-    if (!fileId) {
-      throw new BadRequestException('FileId is required');
-    }
+  async deleteFile(@Param() params: FileDeleteParamRequestDTO) {
+    return this.fileService.deleteFile(params.file_id);
+  }
 
-    return this.fileService.deleteFile(fileId);
+  @ApiOperation({ summary: 'Получить информацию о файле по ID' })
+  @Get(':file_id')
+  async getFile(@Param() params: FileGetParamsDTO) {
+    return this.fileService.getFileById(params.file_id);
   }
 }

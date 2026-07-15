@@ -2,9 +2,17 @@ import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { FILE_SERVICE_NAME, FileServiceClient } from '@generated/file/file';
 import { type ClientGrpc } from '@nestjs/microservices';
 import { FILE_SERVICE } from '@modules/files/constants/constants';
-import { UploadFileGrpcDTO } from '@modules/files/dto';
-import { UploadFileGrpcResponseDTO } from '@modules/files/dto/grpc/response/upload';
+import {
+  FileDetailResponseDTO,
+  FileResponseDTO,
+  UploadFileGrpcDTO,
+} from '@modules/files/dto';
 import { firstValueFrom } from 'rxjs';
+import { fromGrpcFileListResponse } from '@modules/files/mappers/list';
+import {
+  fromGrpcFileToDetailResponse,
+  fromGrpcFileToResponse,
+} from '@modules/files/mappers/file';
 
 @Injectable()
 export class FileGrpcProvider implements OnModuleInit {
@@ -24,11 +32,11 @@ export class FileGrpcProvider implements OnModuleInit {
    * Отправляет запрос на загрузку файла
    * @param file
    */
-  public async uploadFile(
-    file: UploadFileGrpcDTO,
-  ): Promise<UploadFileGrpcResponseDTO> {
+  public async uploadFile(file: UploadFileGrpcDTO): Promise<FileResponseDTO> {
     try {
-      return await firstValueFrom(this.fileClient.upload(file));
+      const result = await firstValueFrom(this.fileClient.upload(file));
+
+      return fromGrpcFileToResponse(result);
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -47,13 +55,14 @@ export class FileGrpcProvider implements OnModuleInit {
     limit: number = 25,
   ) {
     try {
-      return await firstValueFrom(
+      const result = await firstValueFrom(
         this.fileClient.listByFolderId({
           folderId: folderId,
           cursor: cursor,
           limit: limit,
         }),
       );
+      return fromGrpcFileListResponse(result);
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -64,13 +73,15 @@ export class FileGrpcProvider implements OnModuleInit {
    * Получить файл по ID
    * @param fileId
    */
-  public async getById(fileId: string) {
+  public async getById(fileId: string): Promise<FileDetailResponseDTO> {
     try {
-      return await firstValueFrom(
+      const result = await firstValueFrom(
         this.fileClient.getById({
           id: fileId,
         }),
       );
+
+      return fromGrpcFileToDetailResponse(result);
     } catch (error) {
       this.logger.error(error);
       throw error;
