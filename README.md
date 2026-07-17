@@ -91,8 +91,8 @@ docker compose up -d
 # Go сервис (dev)
 cd file-service && go run ./cmd/main.go
 
-# NestJS gateway (dev)
-cd gateway && npm run start:dev
+# NestJS api-gateway (dev)
+cd api-gateway && npm run start:dev
 
 # Angular (dev)
 cd frontend && ng serve

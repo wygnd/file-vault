@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 5s
+
+scrape_config:
+  - job_name: 'api-gateway'
+    metrics_path: /metrics
+    static_configs:
+      - targets: [ 'api-gateway:${API_GATEWAY_PORT}' ]
+
+# todo: config for file-service
